@@ -11,6 +11,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.AttributeSet;
 import android.view.View;
@@ -30,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView xmlData;
     public static final String xmlRequest = "https://api.themoviedb.org/3/search/tv?api_key=862c044119db5df703d9b0d454af8251&language=en-US&query=";
     private HttpClient httpClient;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager layoutManager;
 
 
     @Override
@@ -40,6 +45,12 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         xmlData = findViewById(R.id.xml_text);
         httpClient = new HttpClient();
+        recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -104,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Movie movie) {
             super.onPostExecute(movie);
-            xmlData.setText(String.valueOf(movie.getId()));
+            xmlData.setText(movie.getTitle());
         }
     }
 }

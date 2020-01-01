@@ -25,22 +25,26 @@ public class JsonParser {
 
 
     public Movie jsonParser(String response) {
+        String result = "";
         try {
+
             parser = new JSONObject(response);
             JSONArray results = parser.getJSONArray("results");
-                id = results.getJSONObject(0).getInt("id");
-                title = results.getJSONObject(0).getString("title");
-                textData = results.getJSONObject(0).getString("release_date");
-                posterPath = results.getJSONObject(0).getString("poster_path");
-                voteAverage = results.getJSONObject(0).getDouble("vote_average");
-                overview = results.getJSONObject(0).getString("overview");
+            for (int i = 0; i < results.length(); i++) {
+                id = results.getJSONObject(i).getInt("id");
+                title = results.getJSONObject(i).getString("title");
+                result+="id: "+String.valueOf(id)+"\n"+"title: "+ title+"\n\n";
+            }
 
-
+                //textData = results.getJSONObject(0).getString("release_date");
+                //posterPath = results.getJSONObject(0).getString("poster_path");
+                //voteAverage = results.getJSONObject(0).getDouble("vote_average");
+                //overview = results.getJSONObject(0).getString("overview");
 
         } catch (JSONException e) {
             e.printStackTrace();
         } finally {
-            return new Movie(id, "none", "none", "none", 0, "none");
+            return new Movie(id, result, "none", "none", 0, "none");
         }
 
     }
