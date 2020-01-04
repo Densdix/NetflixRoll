@@ -2,4 +2,7 @@
     <string name="app_name">Netflix Roll</string>
     <string name="action_settings">Settings</string>
     <string name="xml_data">xml data</string>
+    <string name="saved_movies">Saved movies</string>
+    <string name="search_with_title">Search with title</string>
+    <string name="search_with_person">Search with person</string>
 </resources>

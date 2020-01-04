@@ -11,10 +11,10 @@ public class Movie {
     private String textData;
     private SimpleDateFormat releaseDate;
     private String posterPath;
-    private float voteAverage;
+    private double voteAverage;
     private String overview;
 
-    public Movie(int id, String title, String textData, String posterPath, float voteAverage, String overview) {
+    public Movie(int id, String title, String textData, String posterPath, double voteAverage, String overview) {
         this.id = id;
         this.title = title;
         this.textData = textData;
@@ -47,7 +47,7 @@ public class Movie {
         return posterPath;
     }
 
-    public float getVoteAverage() {
+    public double getVoteAverage() {
         return voteAverage;
     }
 

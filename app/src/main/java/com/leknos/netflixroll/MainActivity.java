@@ -1,12 +1,15 @@
 package com.leknos.netflixroll;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -15,9 +18,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -27,13 +32,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView xmlData;
     public static final String xmlRequest = "https://api.themoviedb.org/3/search/tv?api_key=862c044119db5df703d9b0d454af8251&language=en-US&query=";
+
     private HttpClient httpClient;
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private MoviesListAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
 
@@ -42,15 +48,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Saved Movies");
         setSupportActionBar(toolbar);
-        xmlData = findViewById(R.id.xml_text);
+        ///xmlData = findViewById(R.id.xml_text);
         httpClient = new HttpClient();
         recyclerView = findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
 
-        // use a linear layout manager
-        layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -95,27 +98,47 @@ public class MainActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        Intent intent;
+        switch (item.getItemId()){
+            case R.id.saved_movies :
+                intent = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.search_with_title :
+                intent = new Intent(MainActivity.this, SearchWithTitleActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.search_with_director :
+                intent = new Intent(MainActivity.this, SearchWithPersonActivity.class);
+                startActivity(intent);
+                break;
+            default: break;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    public class AsyncTaskParse extends AsyncTask<String, Void, Movie>{
+    public class AsyncTaskParse extends AsyncTask<String, Void, ArrayList<Movie>> {
 
         @Override
-        protected Movie doInBackground(String... strings) {
-                return httpClient.readMovieInfo(strings[0]);
+        protected ArrayList<Movie> doInBackground(String... strings) {
+            String text = strings[0];
+            text = text.replace(" ", "%20");
+            return httpClient.readMovieInfo(text);
         }
 
         @Override
-        protected void onPostExecute(Movie movie) {
-            super.onPostExecute(movie);
-            xmlData.setText(movie.getTitle());
+        protected void onPostExecute(ArrayList<Movie> movies) {
+            super.onPostExecute(movies);
+            recyclerView.setHasFixedSize(true);
+            mAdapter = new MoviesListAdapter(movies);
+
+            // use a linear layout manager
+            layoutManager = new LinearLayoutManager(MainActivity.this);
+            recyclerView.setLayoutManager(layoutManager);
+            recyclerView.setHasFixedSize(true);
+            recyclerView.setAdapter(mAdapter);
+
         }
     }
 }
