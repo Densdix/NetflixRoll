@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
@@ -33,6 +34,12 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class MainActivity extends AppCompatActivity {
     public static final String xmlRequest = "https://api.themoviedb.org/3/search/tv?api_key=862c044119db5df703d9b0d454af8251&language=en-US&query=";
@@ -41,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private MoviesListAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
+    private StringBuilder textResponse;
 
 
     @Override
@@ -69,7 +77,8 @@ public class MainActivity extends AppCompatActivity {
                 builder.setPositiveButton("Search", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        new AsyncTaskParse().execute(input.getText().toString().trim());
+                        //new AsyncTaskParse().execute(input.getText().toString().trim());
+                        postRequest(input.getText().toString().trim());
                     }
                 });
 
@@ -84,6 +93,39 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+
+    }
+
+    public void postRequest(String movieTitle) {
+        if (!movieTitle.equals("")) {
+            String title = movieTitle.replace(" ", "%20");
+            Call<MoviePager> call = NetworkService.getInstance().getJSONApi().getMovies(title);
+            call.enqueue(new Callback<MoviePager>() {
+                @Override
+                public void onResponse(Call<MoviePager> call, Response<MoviePager> response) {
+                    if (!response.isSuccessful()) {
+                        Log.e("APP_FAILURE", String.valueOf(response.code()));
+                        return;
+                    }
+                    MoviePager moviePager = response.body();
+                    ArrayList<Movie> movies = (ArrayList<Movie>) moviePager.getMovies();
+                    recyclerView.setHasFixedSize(true);
+                    mAdapter = new MoviesListAdapter(movies);
+
+                    // use a linear layout manager
+                    layoutManager = new LinearLayoutManager(MainActivity.this);
+                    recyclerView.setLayoutManager(layoutManager);
+                    recyclerView.setHasFixedSize(true);
+                    recyclerView.setAdapter(mAdapter);
+                }
+
+                @Override
+                public void onFailure(Call<MoviePager> call, Throwable t) {
+                    Log.e("APP_FAILURE", t.getMessage());
+                }
+            });
+        }
     }
 
     @Override
@@ -99,20 +141,21 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         Intent intent;
-        switch (item.getItemId()){
-            case R.id.saved_movies :
+        switch (item.getItemId()) {
+            case R.id.saved_movies:
                 intent = new Intent(MainActivity.this, MainActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.search_with_title :
+            case R.id.search_with_title:
                 intent = new Intent(MainActivity.this, SearchWithTitleActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.search_with_director :
+            case R.id.search_with_director:
                 intent = new Intent(MainActivity.this, SearchWithPersonActivity.class);
                 startActivity(intent);
                 break;
-            default: break;
+            default:
+                break;
         }
 
         return super.onOptionsItemSelected(item);

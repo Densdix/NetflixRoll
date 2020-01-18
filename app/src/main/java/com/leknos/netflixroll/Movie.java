@@ -1,5 +1,8 @@
 package com.leknos.netflixroll;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -8,9 +11,14 @@ import java.util.Locale;
 public class Movie {
     private int id;
     private String title;
+    @SerializedName("release_date")
+    @Expose
     private String textData;
-    private SimpleDateFormat releaseDate;
+    @SerializedName("poster_path")
+    @Expose
     private String posterPath;
+    @SerializedName("vote_average")
+    @Expose
     private double voteAverage;
     private String overview;
 
@@ -23,10 +31,6 @@ public class Movie {
         this.overview = overview;
     }
 
-    public SimpleDateFormat convertStringToData(){
-        return new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-    }
-
     public int getId() {
         return id;
     }
@@ -37,10 +41,6 @@ public class Movie {
 
     public String getTextData() {
         return textData;
-    }
-
-    public SimpleDateFormat getReleaseDate() {
-        return releaseDate;
     }
 
     public String getPosterPath() {

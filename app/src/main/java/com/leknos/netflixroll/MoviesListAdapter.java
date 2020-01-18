@@ -76,7 +76,10 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
             movieTextData.setText(movies.get(listIndex).getTextData());
             movieVoteAverage.setText(String.valueOf(movies.get(listIndex).getVoteAverage()));
             movieOverview.setText(movies.get(listIndex).getOverview());
-            Picasso.get().load(HttpClient.posterRequest+movies.get(listIndex).getPosterPath()).into(movieImage);
+            Picasso.get()
+                    .load(HttpClient.posterRequest+movies.get(listIndex).getPosterPath())
+                    .placeholder(R.drawable.no_poster)
+                    .into(movieImage);
         }
     }
 }
