@@ -3,18 +3,21 @@ package com.leknos.netflixroll;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.leknos.netflixroll.model.Movie;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.MoviesListViewHolder> {
+import static com.leknos.netflixroll.utils.Constants.BASE_URL_IMG;
 
+public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.MoviesListViewHolder> {
 
     private int numberItems;
     private ArrayList<Movie> movies;
@@ -77,7 +80,7 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
             movieVoteAverage.setText(String.valueOf(movies.get(listIndex).getVoteAverage()));
             movieOverview.setText(movies.get(listIndex).getOverview());
             Picasso.get()
-                    .load(HttpClient.posterRequest+movies.get(listIndex).getPosterPath())
+                    .load(BASE_URL_IMG+movies.get(listIndex).getPosterPath())
                     .placeholder(R.drawable.no_poster)
                     .into(movieImage);
         }

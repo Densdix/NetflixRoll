@@ -1,5 +1,8 @@
 package com.leknos.netflixroll;
 
+import com.leknos.netflixroll.model.Movie;
+import com.leknos.netflixroll.utils.JsonParser;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,9 +11,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import static com.leknos.netflixroll.utils.Constants.API_KEY_VALUE;
+import static com.leknos.netflixroll.utils.Constants.BASE_URL;
+
 public class HttpClient {
-    public static final String xmlRequest = "https://api.themoviedb.org/3/search/movie?api_key=862c044119db5df703d9b0d454af8251&language=en-US&query=";
-    public static final String posterRequest = "https://image.tmdb.org/t/p/w220_and_h330_face";
+    public static final String MOVIE_REQUEST = BASE_URL+"search/movie?api_key="+API_KEY_VALUE+"&language=en-US&query=";
+
     private JsonParser jsonParser;
     private ArrayList<Movie> movies;
 
@@ -20,7 +26,7 @@ public class HttpClient {
 
     public ArrayList<Movie> readMovieInfo(String searchWord) {
         try {
-            String fullRequest = xmlRequest + searchWord;
+            String fullRequest = MOVIE_REQUEST + searchWord;
             URL url = new URL(fullRequest);
             String response = convertStreamToString(url.openStream());
             movies = jsonParser.jsonParser(response);

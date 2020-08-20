@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/drawer_menu__saved_movies">
+
+    <fragment
+        android:id="@+id/drawer_menu__saved_movies"
+        android:name="com.leknos.netflixroll.ui.SavedMoviesFragment"
+        android:label="fragment_saved_movies"
+        tools:layout="@layout/fragment_saved_movies" />
+    <fragment
+        android:id="@+id/drawer_menu__search_with_title"
+        android:name="com.leknos.netflixroll.ui.SearchWithTitleFragment"
+        android:label="fragment_search_with_title"
+        tools:layout="@layout/fragment_search_with_title" />
+    <fragment
+        android:id="@+id/drawer_menu__search_with_person"
+        android:name="com.leknos.netflixroll.ui.SearchWithPersonFragment"
+        android:label="fragment_search_with_person"
+        tools:layout="@layout/fragment_search_with_person" />
+</navigation>

@@ -1,12 +1,14 @@
-package com.leknos.netflixroll;
+package com.leknos.netflixroll.utils;
 
-import retrofit2.Callback;
+import com.leknos.netflixroll.TheMovieDbApi;
+
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.leknos.netflixroll.utils.Constants.BASE_URL;
+
 public class NetworkService {
     private static NetworkService mInstance;
-    private static final String BASE_URL = "https://api.themoviedb.org/3/";
     private Retrofit mRetrofit;
 
     public static NetworkService getInstance(){

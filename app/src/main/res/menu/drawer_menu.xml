@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/drawer_menu__saved_movies"
+            android:icon="@android:drawable/ic_menu_more"
+            android:title="Saved movies" />
+
+        <item
+            android:id="@+id/drawer_menu__search_with_title"
+            android:icon="@android:drawable/ic_menu_more"
+            android:title="Search movie with title" />
+
+        <item
+            android:id="@+id/drawer_menu__search_with_person"
+            android:icon="@android:drawable/ic_menu_more"
+            android:title="Search movie with person" />
+    </group>
+</menu>
