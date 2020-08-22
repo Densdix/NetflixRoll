@@ -4,5 +4,5 @@
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#6200EE</color>
     <color name="drawerItemSelected">#6200EE</color>
-    <color name="drawerItemBackgroundSelected">#16C116FF</color>
+    <color name="drawerItemBackgroundSelected">#166200EE</color>
 </resources>

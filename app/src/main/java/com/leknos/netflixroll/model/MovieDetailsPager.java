@@ -2,11 +2,10 @@ package com.leknos.netflixroll.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.leknos.netflixroll.model.Movie;
 
 import java.util.List;
 
-public class MoviePager {
+public class MovieDetailsPager {
     @SerializedName("total_pages")
     @Expose
     private int totalPages;
@@ -17,9 +16,9 @@ public class MoviePager {
 
     @SerializedName("results")
     @Expose
-    private List<Movie> movies = null;
+    private List<MovieDetails> movies = null;
 
-    public List<Movie> getMovies() {
+    public List<MovieDetails> getMovies() {
         return movies;
     }
 

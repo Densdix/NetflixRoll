@@ -16,6 +16,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.leknos.netflixroll.MainActivity;
@@ -35,6 +37,7 @@ public class SearchWithTitleFragment extends Fragment {
     private RecyclerView recyclerView;
     private MoviesListAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
+    private TextView textView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,6 +49,7 @@ public class SearchWithTitleFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        textView = view.findViewById(R.id.fragment_search_with_title__textView);
         recyclerView = view.findViewById(R.id.fragment_search_with_title__recycler_view);
         FloatingActionButton fab = view.findViewById(R.id.fragment_search_with_title__fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -80,7 +84,9 @@ public class SearchWithTitleFragment extends Fragment {
 
     public void postRequest(String movieTitle) {
         if (!movieTitle.equals("")) {
-            String title = movieTitle.replace(" ", "%20");
+            //String title = movieTitle.replace(" ", "%20");
+            String title = movieTitle;
+
             Call<MoviePager> call = NetworkService.getInstance().getJSONApi().getMovies(title);
             call.enqueue(new Callback<MoviePager>() {
                 @Override
@@ -91,14 +97,32 @@ public class SearchWithTitleFragment extends Fragment {
                     }
                     MoviePager moviePager = response.body();
                     ArrayList<Movie> movies = (ArrayList<Movie>) moviePager.getMovies();
+
+                    if ((movies.isEmpty())) {
+                        textView.setVisibility(View.VISIBLE);
+                        textView.setText(getString(R.string.no_movie_was_found));
+                    } else {
+                        textView.setVisibility(View.GONE);
+                    }
                     recyclerView.setHasFixedSize(true);
                     mAdapter = new MoviesListAdapter(movies);
+                    mAdapter.setOnMovieItemClickListener(new MoviesListAdapter.OnMovieItemClickListener() {
+                        @Override
+                        public void onMovieItemClick(int position) {
+                            Movie movie = movies.get(position);
+                            Toast.makeText(getContext(), "id"+movie.getId()+" title"+movie.getTitle(), Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getContext(), MovieDetailsActivity.class);
+                            intent.putExtra("MOVIE_ID", movie.getId());
+                            startActivity(intent);
+                        }
+                    });
 
                     // use a linear layout manager
                     layoutManager = new LinearLayoutManager(getContext());
                     recyclerView.setLayoutManager(layoutManager);
                     recyclerView.setHasFixedSize(true);
                     recyclerView.setAdapter(mAdapter);
+
                 }
 
                 @Override

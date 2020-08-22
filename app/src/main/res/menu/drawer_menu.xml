@@ -3,17 +3,17 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/drawer_menu__saved_movies"
-            android:icon="@android:drawable/ic_menu_more"
-            android:title="Saved movies" />
+            android:icon="@drawable/ic_saved_movies"
+            android:title="@string/saved_movies" />
 
         <item
             android:id="@+id/drawer_menu__search_with_title"
-            android:icon="@android:drawable/ic_menu_more"
-            android:title="Search movie with title" />
+            android:icon="@drawable/ic_search_with_title"
+            android:title="@string/search_movie_with_title" />
 
         <item
             android:id="@+id/drawer_menu__search_with_person"
-            android:icon="@android:drawable/ic_menu_more"
-            android:title="Search movie with person" />
+            android:icon="@drawable/ic_search_with_person"
+            android:title="@string/search_movie_with_person" />
     </group>
 </menu>

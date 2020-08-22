@@ -1,4 +1,4 @@
-package com.leknos.netflixroll;
+package com.leknos.netflixroll.utils;
 
 import com.leknos.netflixroll.model.Movie;
 import com.leknos.netflixroll.utils.JsonParser;

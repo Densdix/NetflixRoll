@@ -1,5 +1,7 @@
 package com.leknos.netflixroll;
 
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.leknos.netflixroll.model.Movie;
@@ -16,12 +21,22 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import static com.leknos.netflixroll.utils.Constants.BASE_URL_IMG;
+import static com.leknos.netflixroll.utils.Constants.VIEW_HOLDER_COLOR;
 
 public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.MoviesListViewHolder> {
 
     private int numberItems;
     private ArrayList<Movie> movies;
     private static int numberOfViewHolder;
+    private OnMovieItemClickListener onMovieItemClickListener;
+
+    public interface OnMovieItemClickListener {
+        void onMovieItemClick(int position);
+    }
+
+    public void setOnMovieItemClickListener(OnMovieItemClickListener listener){
+        onMovieItemClickListener = listener;
+    }
 
     public MoviesListAdapter(ArrayList<Movie> movies) {
         this.numberItems = movies.size();
@@ -36,8 +51,13 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.movie_list_item, parent, false);
         MoviesListViewHolder moviesListViewHolder = new MoviesListViewHolder(view);
+        if(numberOfViewHolder%2 == 0)
+            moviesListViewHolder.constraintLayout.setBackgroundColor(Color.parseColor(VIEW_HOLDER_COLOR));
         moviesListViewHolder.viewHolderId.setText(String.valueOf(numberOfViewHolder));
+
         numberOfViewHolder++;
+
+
         return moviesListViewHolder;
     }
 
@@ -52,7 +72,7 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
     }
 
     class MoviesListViewHolder extends RecyclerView.ViewHolder{
-
+        ConstraintLayout constraintLayout;
         TextView movieId;
         TextView movieTitle;
         TextView movieTextData;
@@ -63,7 +83,7 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
 
         public MoviesListViewHolder(@NonNull View itemView) {
             super(itemView);
-
+            constraintLayout = itemView.findViewById(R.id.movie_list_item__id);
             movieId = itemView.findViewById(R.id.movie_id);
             movieTitle = itemView.findViewById(R.id.movie_title);
             movieTextData = itemView.findViewById(R.id.movie_textData);
@@ -71,6 +91,12 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
             movieOverview = itemView.findViewById(R.id.movie_overview);
             viewHolderId = itemView.findViewById(R.id.view_holder_id);
             movieImage = itemView.findViewById(R.id.movie_image);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onMovieItemClickListener.onMovieItemClick(getAdapterPosition());
+                }
+            });
         }
 
         void bind(int listIndex){
