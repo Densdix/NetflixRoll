@@ -2,38 +2,28 @@ package com.leknos.netflixroll.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.leknos.netflixroll.MainActivity;
-import com.leknos.netflixroll.MoviesListAdapter;
 import com.leknos.netflixroll.R;
+import com.leknos.netflixroll.db.MovieDao;
+import com.leknos.netflixroll.db.MovieDatabase;
 import com.leknos.netflixroll.model.Movie;
 import com.leknos.netflixroll.model.MovieDetails;
-import com.leknos.netflixroll.model.MovieDetailsPager;
-import com.leknos.netflixroll.model.MoviePager;
-import com.leknos.netflixroll.utils.NetworkService;
+import com.leknos.netflixroll.util.NetworkService;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.leknos.netflixroll.utils.Constants.BASE_URL_IMG;
-import static com.leknos.netflixroll.utils.Constants.W500_URL_IMG;
+import static com.leknos.netflixroll.util.Constants.W500_URL_IMG;
 
 public class MovieDetailsActivity extends AppCompatActivity{
 
@@ -43,6 +33,7 @@ public class MovieDetailsActivity extends AppCompatActivity{
     private TextView textData;
     private ImageView imageView;
     private Toolbar toolbar;
+    private MovieDetails movie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +62,7 @@ public class MovieDetailsActivity extends AppCompatActivity{
                         Log.e("APP_FAILURE", String.valueOf(response.code()));
                         return;
                     }
-                    MovieDetails movie = response.body();
+                    movie = response.body();
                     toolbar.setTitle(movie.getTitle());
                     description.setText(movie.getOverview());
                     voteAverage.setText(String.valueOf(movie.getVoteAverage()));
@@ -99,17 +90,42 @@ public class MovieDetailsActivity extends AppCompatActivity{
         return true;
     }
 
+    private Movie getMovie(){
+        int id = movie.getId();
+        String title = movie.getTitle();
+        String textData = movie.getReleaseDate();
+        String posterPath = movie.getPosterPath();
+        double voteAverage = movie.getVoteAverage();
+        String overview = movie.getOverview();
+        return new Movie(id, title, textData, posterPath, voteAverage, overview);
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent;
         switch (item.getItemId()) {
             case R.id.menu_movie_details__save:
-                intent = new Intent(MovieDetailsActivity.this, MainActivity.class);
-                startActivity(intent);
+                MovieDao movieDao = MovieDatabase.getInstance(getApplicationContext()).movieDao();
+                new InsertMovieAsyncTask(movieDao).execute(getMovie());
+                //if(movie.getId() == )
                 break;
             default:
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public static class InsertMovieAsyncTask extends AsyncTask<Movie, Void, Void> {
+        MovieDao movieDao;
+
+        private InsertMovieAsyncTask(MovieDao movieDao){
+            this.movieDao = movieDao;
+        }
+
+        @Override
+        protected Void doInBackground(Movie... movies) {
+            movieDao.insert(movies[0]);
+            Log.d("EXECUTEEXECUTE2", "doInBackground: EXECUTE");
+            return null;
+        }
     }
 }

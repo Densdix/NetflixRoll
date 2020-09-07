@@ -1,27 +1,25 @@
-package com.leknos.netflixroll;
+package com.leknos.netflixroll.adapter;
 
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.leknos.netflixroll.R;
 import com.leknos.netflixroll.model.Movie;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import static com.leknos.netflixroll.utils.Constants.BASE_URL_IMG;
-import static com.leknos.netflixroll.utils.Constants.VIEW_HOLDER_COLOR;
+import static com.leknos.netflixroll.util.Constants.BASE_URL_IMG;
+import static com.leknos.netflixroll.util.Constants.VIEW_HOLDER_COLOR;
 
 public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.MoviesListViewHolder> {
 
@@ -42,6 +40,16 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
         this.numberItems = movies.size();
         this.movies = movies;
         numberOfViewHolder = 0;
+    }
+
+    public MoviesListAdapter(){
+
+    }
+
+    public void setMovies(List<Movie> movies) {
+        this.movies = (ArrayList<Movie>) movies;
+        this.numberItems = movies.size();
+        notifyDataSetChanged();
     }
 
     @NonNull

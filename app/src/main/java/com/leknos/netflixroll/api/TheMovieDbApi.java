@@ -1,7 +1,6 @@
-package com.leknos.netflixroll;
+package com.leknos.netflixroll.api;
 
 import com.leknos.netflixroll.model.MovieDetails;
-import com.leknos.netflixroll.model.MovieDetailsPager;
 import com.leknos.netflixroll.model.MoviePager;
 
 import retrofit2.Call;
@@ -9,8 +8,8 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-import static com.leknos.netflixroll.utils.Constants.API_KEY_VALUE;
-import static com.leknos.netflixroll.utils.Constants.LANGUAGE;
+import static com.leknos.netflixroll.util.Constants.API_KEY_VALUE;
+import static com.leknos.netflixroll.util.Constants.LANGUAGE;
 
 public interface TheMovieDbApi {
     @GET("search/movie?api_key="+API_KEY_VALUE+"&language="+LANGUAGE)

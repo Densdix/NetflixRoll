@@ -1,11 +1,11 @@
-package com.leknos.netflixroll.utils;
+package com.leknos.netflixroll.util;
 
-import com.leknos.netflixroll.TheMovieDbApi;
+import com.leknos.netflixroll.api.TheMovieDbApi;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.leknos.netflixroll.utils.Constants.BASE_URL;
+import static com.leknos.netflixroll.util.Constants.BASE_URL;
 
 public class NetworkService {
     private static NetworkService mInstance;

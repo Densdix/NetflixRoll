@@ -1,4 +1,4 @@
-package com.leknos.netflixroll.utils;
+package com.leknos.netflixroll.util;
 
 public class Constants {
     public static final String API_KEY_VALUE = "862c044119db5df703d9b0d454af8251";

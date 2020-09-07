@@ -20,12 +20,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.leknos.netflixroll.MainActivity;
-import com.leknos.netflixroll.MoviesListAdapter;
+import com.leknos.netflixroll.adapter.MoviesListAdapter;
 import com.leknos.netflixroll.R;
 import com.leknos.netflixroll.model.Movie;
 import com.leknos.netflixroll.model.MoviePager;
-import com.leknos.netflixroll.utils.NetworkService;
+import com.leknos.netflixroll.util.NetworkService;
 
 import java.util.ArrayList;
 

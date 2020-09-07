@@ -1,66 +1,76 @@
 package com.leknos.netflixroll.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.leknos.netflixroll.viewmodel.MovieViewModel;
+import com.leknos.netflixroll.adapter.MoviesListAdapter;
 import com.leknos.netflixroll.R;
+import com.leknos.netflixroll.model.Movie;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link SavedMoviesFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.List;
+
 public class SavedMoviesFragment extends Fragment {
+    private MovieViewModel movieViewModel;
+    private RecyclerView recyclerView;
+    private MoviesListAdapter mAdapter;
+    private ArrayList<Movie> movies;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public SavedMoviesFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SavedMoviesFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SavedMoviesFragment newInstance(String param1, String param2) {
-        SavedMoviesFragment fragment = new SavedMoviesFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public void setMovies(ArrayList<Movie> movies) {
+        this.movies = movies;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        movieViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication())).get(MovieViewModel.class);
         return inflater.inflate(R.layout.fragment_saved_movies, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        recyclerView = view.findViewById(R.id.fragment_saved_movies__recycler_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mAdapter = new MoviesListAdapter();
+        recyclerView.setAdapter(mAdapter);
+
+        mAdapter.setOnMovieItemClickListener(new MoviesListAdapter.OnMovieItemClickListener() {
+            @Override
+            public void onMovieItemClick(int position) {
+                Movie movie = movies.get(position);
+                Toast.makeText(getContext(), "id"+movie.getId()+" title"+movie.getTitle(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), MovieDetailsActivity.class);
+                intent.putExtra("MOVIE_ID", movie.getId());
+                startActivity(intent);
+            }
+        });
+
+        movieViewModel.getAllMovies().observe(getViewLifecycleOwner(), new Observer<List<Movie>>() {
+            @Override
+            public void onChanged(List<Movie> movies) {
+                setMovies((ArrayList<Movie>) movies);
+                mAdapter.setMovies(movies);
+            }
+        });
+
+
+
     }
 }
