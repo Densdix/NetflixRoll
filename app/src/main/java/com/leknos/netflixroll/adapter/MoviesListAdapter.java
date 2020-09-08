@@ -52,6 +52,10 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
         notifyDataSetChanged();
     }
 
+    public Movie getMovieAt(int position){
+        return movies.get(position);
+    }
+
     @NonNull
     @Override
     public MoviesListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -61,10 +65,7 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
         MoviesListViewHolder moviesListViewHolder = new MoviesListViewHolder(view);
         if(numberOfViewHolder%2 == 0)
             moviesListViewHolder.constraintLayout.setBackgroundColor(Color.parseColor(VIEW_HOLDER_COLOR));
-        moviesListViewHolder.viewHolderId.setText(String.valueOf(numberOfViewHolder));
-
         numberOfViewHolder++;
-
 
         return moviesListViewHolder;
     }
@@ -86,18 +87,15 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
         TextView movieTextData;
         TextView movieVoteAverage;
         TextView movieOverview;
-        TextView viewHolderId;
         ImageView movieImage;
 
         public MoviesListViewHolder(@NonNull View itemView) {
             super(itemView);
             constraintLayout = itemView.findViewById(R.id.movie_list_item__id);
-            movieId = itemView.findViewById(R.id.movie_id);
             movieTitle = itemView.findViewById(R.id.movie_title);
             movieTextData = itemView.findViewById(R.id.movie_textData);
             movieVoteAverage = itemView.findViewById(R.id.movie_voteAverage);
             movieOverview = itemView.findViewById(R.id.movie_overview);
-            viewHolderId = itemView.findViewById(R.id.view_holder_id);
             movieImage = itemView.findViewById(R.id.movie_image);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -108,7 +106,6 @@ public class MoviesListAdapter extends RecyclerView.Adapter<MoviesListAdapter.Mo
         }
 
         void bind(int listIndex){
-            movieId.setText("id: "+String.valueOf(movies.get(listIndex).getId()));
             movieTitle.setText(movies.get(listIndex).getTitle());
             movieTextData.setText(movies.get(listIndex).getTextData());
             movieVoteAverage.setText(String.valueOf(movies.get(listIndex).getVoteAverage()));
